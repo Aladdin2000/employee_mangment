@@ -1,0 +1,65 @@
+﻿@model employees_mangment.Models.employees
+
+@{
+    ViewBag.Title = "Add Employee";
+    var properties = ViewBag.Properties as List<employees_mangment.Models.PropertyDefinition>;
+}
+
+<h2>Add New Employee</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Employee Code</label>
+        @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Employee Name</label>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+
+    <hr />
+    <h4>Custom Properties</h4>
+
+    <div id="customProps">
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Employee</button>
+    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+}
+
+@if (properties != null)
+{
+    for (int i = 0; i < properties.Count; i++)
+    {
+        var prop = properties[i];
+        <div class="form-group">
+            <label>@prop.Name @(prop.IsRequired ? "*" : "")</label>
+            @if (prop.Type == "Dropdown")
+            {
+                var options = prop.DropdownOptions.Split(',');
+                <select name="propertyValues[@i]" class="form-control">
+                    @for (int j = 0; j < options.Length; j++)
+                    {
+                        <option value="@options[j].Trim()">@options[j].Trim()</option>
+                    }
+                </select>
+            }
+            else if (prop.Type == "Date")
+            {
+                <input type="date" name="propertyValues[@i]" class="form-control" />
+            }
+            else if (prop.Type == "Integer")
+            {
+                <input type="number" name="propertyValues[@i]" class="form-control" />
+            }
+            else
+            {
+                <input type="text" name="propertyValues[@i]" class="form-control" />
+            }
+        </div>
+    }
+}

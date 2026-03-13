@@ -1,0 +1,33 @@
+﻿@model IEnumerable<employees_mangment.Models.employees>
+
+@{
+    ViewBag.Title = "Employees";
+}
+
+<h2>Employees List</h2>
+
+<p>
+    @Html.ActionLink("Add New Employee", "Create", "Employee",
+        new { }, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Properties</th>
+    </tr>
+    @foreach (var emp in Model)
+    {
+        <tr>
+            <td>@emp.Code</td>
+            <td>@emp.Name</td>
+            <td>
+                @foreach (var pv in emp.PropertyValues)
+                {
+                    <span><b>@pv.PropertyDefinition.Name:</b> @pv.Value</span><br />
+                }
+            </td>
+        </tr>
+    }
+</table>

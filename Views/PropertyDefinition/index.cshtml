@@ -1,0 +1,30 @@
+﻿@model IEnumerable<employees_mangment.Models.PropertyDefinition>
+
+@{
+    ViewBag.Title = "Properties";
+}
+
+<h2>Properties List</h2>
+
+<p>
+    @Html.ActionLink("Add New Property", "Create", "PropertyDefinition",
+        new { }, new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Dropdown Options</th>
+    </tr>
+    @foreach (var prop in Model)
+    {
+        <tr>
+            <td>@prop.Name</td>
+            <td>@prop.Type</td>
+            <td>@(prop.IsRequired ? "Yes" : "No")</td>
+            <td>@prop.DropdownOptions</td>
+        </tr>
+    }
+</table>
