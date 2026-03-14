@@ -1,7 +1,7 @@
 ﻿@model employees_mangment.Models.employees
 
 @{
-    ViewBag.Title = "Add Employee";
+    ViewBag.Title = "Edit Employee";
     var properties = ViewBag.Properties as List<employees_mangment.Models.PropertyDefinition>;
 }
 
@@ -9,11 +9,12 @@
     <div style="background: white; border-radius: 15px; padding: 40px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
 
         <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 30px; color: #333; border-bottom: 3px solid #11998e; padding-bottom: 10px;">
-             Add New Employee
+             Edit Employee
         </h2>
 
-        <form action="/Employee/Create" method="post">
+        <form action="/Employee/Edit/@Model.Id" method="post">
             @Html.AntiForgeryToken()
+            @Html.Hidden("id", Model.Id)
 
             <div style="margin-bottom: 25px;">
                 <label style="font-size: 20px; font-weight: bold; display: block; margin-bottom: 8px; color: #555;">Employee Code</label>
@@ -34,6 +35,8 @@
                 {
                     var prop = properties[i];
                     string fieldName = "prop_" + i;
+                    var currentValue = Model.PropertyValues
+                        .FirstOrDefault(pv => pv.PropertyDefinitionId == prop.Id);
                     <div style="margin-bottom: 25px;">
                         <label style="font-size: 20px; font-weight: bold; display: block; margin-bottom: 8px; color: #555;">
                             @prop.Name @(prop.IsRequired ? "*" : "")
@@ -50,15 +53,18 @@
                         }
                         else if (prop.Type == "Date")
                         {
-                            <input type="date" name="@fieldName" style="font-size: 20px; height: 50px; width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;" />
+                            <input type="date" name="@fieldName" style="font-size: 20px; height: 50px; width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;"
+                                   value="@(currentValue != null ? currentValue.Value : "")" />
                         }
                         else if (prop.Type == "Integer")
                         {
-                            <input type="number" name="@fieldName" style="font-size: 20px; height: 50px; width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;" />
+                            <input type="number" name="@fieldName" style="font-size: 20px; height: 50px; width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;"
+                                   value="@(currentValue != null ? currentValue.Value : "")" />
                         }
                         else
                         {
-                            <input type="text" name="@fieldName" style="font-size: 20px; height: 50px; width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;" />
+                            <input type="text" name="@fieldName" style="font-size: 20px; height: 50px; width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;"
+                                   value="@(currentValue != null ? currentValue.Value : "")" />
                         }
                     </div>
                 }
@@ -66,7 +72,7 @@
 
             <div style="margin-top: 30px;">
                 <button type="submit" id="submitBtn" style="font-size: 20px; padding: 12px 30px; background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border: none; border-radius: 8px; cursor: pointer; margin-right: 10px;">
-                    Save Employee
+                    Save Changes
                 </button>
                 <a href="@Url.Action("Index", "Employee")" style="font-size: 20px; padding: 12px 30px; background: #ccc; color: #333; border-radius: 8px; text-decoration: none;">
                     Back to List
@@ -81,7 +87,7 @@
      background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
     <div style="background:white; border-radius: 15px; padding: 40px; text-align:center; box-shadow: 0 5px 20px rgba(0,0,0,0.3);">
         <div style="font-size: 60px; color: #11998e;">✓</div>
-        <h3 style="font-size: 24px; margin-top: 10px; color: #333;">Employee added successfully!</h3>
+        <h3 style="font-size: 24px; margin-top: 10px; color: #333;">Employee updated successfully!</h3>
     </div>
 </div>
 

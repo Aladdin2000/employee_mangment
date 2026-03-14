@@ -1,33 +1,61 @@
 ﻿@model IEnumerable<employees_mangment.Models.employees>
 
 @{
-    ViewBag.Title = "Employees";
+    ViewBag.Title = "Employee List";
 }
 
-<h2>Employees List</h2>
+<div style="padding: 30px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); min-height: 100vh;">
+    <div style="background: white; border-radius: 15px; padding: 40px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
 
-<p>
-    @Html.ActionLink("Add New Employee", "Create", "Employee",
-        new { }, new { @class = "btn btn-primary" })
-</p>
+        <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 30px; color: #333; border-bottom: 3px solid #11998e; padding-bottom: 10px;">
+            Employee List
+        </h2>
 
-<table class="table table-bordered">
-    <tr>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Properties</th>
-    </tr>
-    @foreach (var emp in Model)
-    {
-        <tr>
-            <td>@emp.Code</td>
-            <td>@emp.Name</td>
-            <td>
-                @foreach (var pv in emp.PropertyValues)
+        <table style="width: 100%; border-collapse: collapse; font-size: 18px;">
+            <thead>
+                <tr style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white;">
+                    <th style="padding: 15px; text-align: left;">Name</th>
+                    <th style="padding: 15px; text-align: left;">Code</th>
+                    @if (Model.Any())
+                    {
+                        foreach (var pv in Model.First().PropertyValues)
+                        {
+                            <th style="padding: 15px; text-align: left;">@pv.PropertyDefinition.Name</th>
+                        }
+                    }
+                    <th style="padding: 15px; text-align: left;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var emp in Model)
                 {
-                    <span><b>@pv.PropertyDefinition.Name:</b> @pv.Value</span><br />
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 15px;">@emp.Name</td>
+                        <td style="padding: 15px;">@emp.Code</td>
+                        @foreach (var pv in emp.PropertyValues)
+                        {
+                            <td style="padding: 15px;">@pv.Value</td>
+                        }
+                        <td style="padding: 15px;">
+                            <a href="@Url.Action("Edit", "Employee", new { id = emp.Id })"
+                               style="background: #007bff; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 16px; margin-right: 5px;">
+                                Edit
+                            </a>
+                            <a href="@Url.Action("Delete", "Employee", new { id = emp.Id })"
+                               style="background: #dc3545; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 16px;"
+                               onclick="return confirm('Are you sure?')">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
                 }
-            </td>
-        </tr>
-    }
-</table>
+            </tbody>
+        </table>
+
+        <br />
+        <a href="@Url.Action("Create", "Employee")" style="font-size: 20px; padding: 12px 25px; background: linear-gradient(135deg, #11998e, #38ef7d); color: white; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 20px;">
+             Add New Employee
+        </a>
+
+    </div>
+</div>
